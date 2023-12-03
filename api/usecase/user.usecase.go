@@ -3,6 +3,7 @@ package usecase
 import (
 	"go-project/api/repository"
 	"go-project/models"
+	serviceemail "go-project/service/serviceEmail"
 	"go-project/utils/encript"
 	"go-project/utils/log"
 	"time"
@@ -43,6 +44,10 @@ func (U *UserUsecase) CreateUser(req models.User) (models.DataUserCreate, error)
 	if err := U.URepository.RegisterUser(&newUser); err != nil {
 		transaction.Rollback()
 		log.Log.Error(log.Register, "Error Save DB User", err)
+		return data, err
+	}
+
+	if err := serviceemail.SendEmailRegister(newUser, models.EmailData{URL: "", FirstName: "fendy", Subject: "Registrasion"}); err != nil {
 		return data, err
 	}
 

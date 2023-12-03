@@ -29,6 +29,12 @@ type Config struct {
 	AccTokenPublicKey  string        `mapstructure:"ACCESS_TOKEN_PUBLIC_KEY"`
 	AccTokenExpireIn   time.Duration `mapstructure:"ACCESS_TOKEN_EXPIRED_IN"`
 	AccTokenMaxEge     int           `mapstructure:"ACCESS_TOKEN_MAXAGE"`
+
+	EmailFrom string `mapstructure:"EMAIL_FROM"`
+	SMTPHost  string `mapstructure:"SMTP_HOST"`
+	SMTPUser  string `mapstructure:"SMTP_USER"`
+	SMTPPass  string `mapstructure:"SMTP_PASS"`
+	SMTPPort  int    `mapstructure:"SMTP_PORT"`
 }
 
 var AppEnv Config
