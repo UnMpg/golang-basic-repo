@@ -1,0 +1,47 @@
+basePath: /v1
+definitions:
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      updatedAt:
+        type: string
+      verificationCode:
+        type: string
+      verified:
+        type: string
+    required:
+    - email
+    - name
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Your API description
+  title: Your API Title
+  version: "1.0"
+paths:
+  /user/api/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Create a new user
+swagger: "2.0"
