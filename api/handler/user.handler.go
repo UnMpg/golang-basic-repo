@@ -9,6 +9,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Create a new user
+// @Description Create a new user
+// @Accept json
+// @Success 201 {object} models.User
+// @Router /user/api/register [post]
+// @Produce json
 func (Uuc *UserHandler) RegisterUser(c *gin.Context) {
 	var req models.User
 

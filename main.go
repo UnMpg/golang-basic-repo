@@ -12,6 +12,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @title Your API Title
+// @version 1.0
+// @description Your API description
+// @host localhost:8080
+// @BasePath /v1
 func main() {
 	var isDev bool
 

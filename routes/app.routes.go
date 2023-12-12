@@ -6,6 +6,7 @@ import (
 	"go-project/api/usecase"
 	"go-project/config"
 	"go-project/db"
+	_ "go-project/docs"
 	"go-project/middleware"
 	"go-project/utils/log"
 

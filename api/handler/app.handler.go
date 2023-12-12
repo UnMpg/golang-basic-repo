@@ -13,6 +13,5 @@ type UserHandler struct {
 func NewUserHandler(userRoute *gin.RouterGroup, userUc usecase.UserUsecase) {
 	handle := UserHandler{Uusecase: userUc}
 
-	// userRoute.GET("/coba", handle.RegisterUser)
 	userRoute.POST("/register", handle.RegisterUser)
 }
