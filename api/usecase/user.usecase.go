@@ -61,3 +61,8 @@ func (U *UserUsecase) CreateUser(req models.User) (models.DataUserCreate, error)
 
 	return data, nil
 }
+
+func (U *UserUsecase) CobaUsecaseTesting() (*models.User, error) {
+
+	return U.URepository.CobaTestRepo()
+}

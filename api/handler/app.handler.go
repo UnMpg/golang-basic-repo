@@ -14,4 +14,5 @@ func NewUserHandler(userRoute *gin.RouterGroup, userUc usecase.UserUsecase) {
 	handle := UserHandler{Uusecase: userUc}
 
 	userRoute.POST("/register", handle.RegisterUser)
+	userRoute.GET("/tes", handle.CobaTest)
 }

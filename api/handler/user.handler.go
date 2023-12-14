@@ -40,3 +40,11 @@ func (Uuc *UserHandler) RegisterUser(c *gin.Context) {
 	c.JSON(message.StatusOk, models.CreateResponse(message.StatusOk, message.SUCCESS, message.SUCCESS, data))
 
 }
+
+func (Uuc *UserHandler) CobaTest(c *gin.Context) {
+	data, err := Uuc.Uusecase.CobaUsecaseTesting()
+	if err != nil {
+		return
+	}
+	c.JSON(message.StatusOk, models.CreateResponse(message.StatusOk, message.SUCCESS, message.SUCCESS, data))
+}

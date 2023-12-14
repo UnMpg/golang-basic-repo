@@ -30,3 +30,11 @@ func (r *UserRepository) RegisterUser(newUser *models.User) error {
 
 	return nil
 }
+
+func (r *UserRepository) CobaTestRepo() (*models.User, error) {
+	data := models.User{
+		Name:  "namsms",
+		Email: "email@gmail.com",
+	}
+	return &data, nil
+}

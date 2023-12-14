@@ -41,7 +41,7 @@ func main() {
 		res := models.Response{RespCode: http.StatusOK, RespMessage: message, Status: "success"}
 		c.JSON(http.StatusOK, res)
 	})
-	r.GET("/aa", func(c *gin.Context) {
+	r.GET("/coba", func(c *gin.Context) {
 		message := "Welcome to golang Project"
 		res := models.Response{RespCode: http.StatusOK, RespMessage: message, Status: "success"}
 		c.JSON(http.StatusOK, res)

@@ -43,13 +43,13 @@ func init() {
 	log.Println("Start Load Config")
 
 	var err error
-	if AppEnv, err = LoaAppEnv("."); err != nil {
+	if AppEnv, err = LoadAppEnv("."); err != nil {
 		log.Println("Load Config Failed", err.Error())
 		panic(err)
 	}
 }
 
-func LoaAppEnv(path string) (conf Config, err error) {
+func LoadAppEnv(path string) (conf Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigType("env")
 	viper.SetConfigName("app")
