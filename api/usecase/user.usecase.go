@@ -3,7 +3,8 @@ package usecase
 import (
 	"go-project/api/repository"
 	"go-project/models"
-	serviceemail "go-project/service/serviceEmail"
+
+	// serviceemail "go-project/service/serviceEmail"
 	"go-project/utils/encript"
 	"go-project/utils/log"
 	"time"
@@ -21,7 +22,7 @@ func (Uuc *UserUsecase) RegisterUser(data string) error {
 	return nil
 }
 
-func (U *UserUsecase) CreateUser(req models.User) (models.DataUserCreate, error) {
+func (Uc *UserUsecase) CreateUser(req models.User) (models.DataUserCreate, error) {
 	var data models.DataUserCreate
 
 	hashPassword, err := encript.HashPassword(req.Password)
@@ -39,20 +40,40 @@ func (U *UserUsecase) CreateUser(req models.User) (models.DataUserCreate, error)
 		CreatedAt: now,
 	}
 
-	transaction := U.URepository.DB.Begin()
+	detail := models.Detail{
+		UserID:  "293924923",
+		Address: "padang",
+		Phone:   "082373873473483",
+	}
 
-	if err := U.URepository.RegisterUser(&newUser); err != nil {
+	transaction := Uc.URepository.DB.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			transaction.Rollback()
+		}
+	}()
+
+	if err := Uc.URepository.AddDetail(&detail); err != nil {
+		transaction.Rollback()
+		log.Log.Error(log.Register, "Error Save DB Detail", err)
+		// return data, err
+	}
+
+	if err := Uc.URepository.RegisterUser(&newUser); err != nil {
 		transaction.Rollback()
 		log.Log.Error(log.Register, "Error Save DB User", err)
-		return data, err
+		// return data, err
 	}
 
-	if err := serviceemail.SendEmailRegister(newUser, models.EmailData{URL: "", FirstName: "fendy", Subject: "Registrasion"}); err != nil {
+	// if err := serviceemail.SendEmailRegister(newUser, models.EmailData{URL: "", FirstName: "fendy", Subject: "Registrasion"}); err != nil {
+	// 	return data, err
+	// }
+
+	if err := transaction.Commit().Error; err != nil {
+		log.Log.Error(log.Register, "Error committing transaction", err)
 		return data, err
 	}
-
-	transaction.Commit()
-
 	data = models.DataUserCreate{
 		Name:  newUser.Name,
 		Email: newUser.Email,

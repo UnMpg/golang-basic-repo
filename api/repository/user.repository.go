@@ -31,6 +31,16 @@ func (r *UserRepository) RegisterUser(newUser *models.User) error {
 	return nil
 }
 
+func (r *UserRepository) AddDetail(detail *models.Detail) error {
+	add := r.DB.Create(&detail)
+	if add.Error != nil {
+		log.Log.Error(log.Register, "Error Create Data")
+		return add.Error
+	}
+
+	return nil
+}
+
 func (r *UserRepository) CobaTestRepo() (*models.User, error) {
 	data := models.User{
 		Name:  "namsms",

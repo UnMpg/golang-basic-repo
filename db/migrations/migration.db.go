@@ -28,7 +28,7 @@ func init() {
 	ConnectionDB()
 }
 func main() {
-	if err := DB.AutoMigrate(&models.User{}); err != nil {
+	if err := DB.AutoMigrate(&models.User{}, &models.Detail{}); err != nil {
 		log.Log.Error("error to migrate table", err.Error())
 	}
 }

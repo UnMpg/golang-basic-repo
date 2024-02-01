@@ -1,10 +1,33 @@
 version: '3'
 
 services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.0
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+  filebeat:
+    build:
+      context: ./filebeat
+    container_name: filebeat
+    command: filebeat -e -strict.perms=false
+    volumes:
+      - ./golang-logs:/src/log
+    depends_on:
+      - elasticsearch
+      - kibana
   postgres:
     image: postgres:13.13-alpine3.18
     container_name: postgres
-    env_file: app.env
+    env_file:
+      - app.env
     environment:
       POSTGRES_USER: ${POSTGRES_NAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASS}
@@ -16,11 +39,16 @@ services:
   go-project:
     container_name: go-project
     build: .
-    env_file: app.env
+    env_file:
+      - app.env
     ports:
       - "8000:8000"
     depends_on:
       - postgres
+    volumes:
+      - ./golang-logs:/src/log
 
 volumes:
   postgres_data:
+  elasticsearch_data:
+    driver: local

@@ -1,17 +1,19 @@
 #use official Golang Image
-FROM golang:1.20.12-alpine3.19
+FROM golang:latest
 
 #Working Directori
-WORKDIR /go/src/app
+RUN mkdir /src/
+WORKDIR /src
 
 #Copy the source code
-COPY . .
+COPY . /src
 
 #Download and Install the Dependencies
 RUN go get -d -v ./...
+RUN go install -v ./...
 
 #Build the Go App
-RUN go build -o go-project .
+RUN go build -o go-project
 
 #Expose The PORT
 EXPOSE 8000
