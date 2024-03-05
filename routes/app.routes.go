@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"go.elastic.co/apm/module/apmgin"
 )
 
 func CreateRoute(isDev bool) *gin.Engine {
@@ -27,6 +28,7 @@ func CreateRoute(isDev bool) *gin.Engine {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, urlSwagger))
 
+	router.Use(apmgin.Middleware(router))
 	router.Use(middleware.CORSMiddleware())
 	router.Use(requestid.New())
 	router.Use(healthcheck.Default())

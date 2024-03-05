@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"go-project/api/repository"
 	"go-project/models"
 
@@ -8,6 +9,8 @@ import (
 	"go-project/utils/encript"
 	"go-project/utils/log"
 	"time"
+
+	"go.elastic.co/apm"
 )
 
 type UserUsecase struct {
@@ -22,8 +25,10 @@ func (Uuc *UserUsecase) RegisterUser(data string) error {
 	return nil
 }
 
-func (Uc *UserUsecase) CreateUser(req models.User) (models.DataUserCreate, error) {
+func (Uc *UserUsecase) CreateUser(ctx context.Context, req models.User) (models.DataUserCreate, error) {
 	var data models.DataUserCreate
+	span, ctx := apm.StartSpan(ctx, "createUser", "usecase")
+	defer span.End()
 
 	hashPassword, err := encript.HashPassword(req.Password)
 	if err != nil {
@@ -60,7 +65,7 @@ func (Uc *UserUsecase) CreateUser(req models.User) (models.DataUserCreate, error
 		// return data, err
 	}
 
-	if err := Uc.URepository.RegisterUser(&newUser); err != nil {
+	if err := Uc.URepository.RegisterUser(ctx, &newUser); err != nil {
 		transaction.Rollback()
 		log.Log.Error(log.Register, "Error Save DB User", err)
 		// return data, err

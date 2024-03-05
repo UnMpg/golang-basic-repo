@@ -7,6 +7,7 @@ import (
 	"go-project/utils/validator"
 
 	"github.com/gin-gonic/gin"
+	"go.elastic.co/apm"
 )
 
 // @Summary Create a new user
@@ -16,6 +17,8 @@ import (
 // @Router /user/api/register [post]
 // @Produce json
 func (Uuc *UserHandler) RegisterUser(c *gin.Context) {
+	span, ctx := apm.StartSpan(c.Request.Context(), "RegisterUser", "request")
+	defer span.End()
 	var req models.User
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -31,7 +34,7 @@ func (Uuc *UserHandler) RegisterUser(c *gin.Context) {
 		return
 	}
 
-	data, err := Uuc.Uusecase.CreateUser(req)
+	data, err := Uuc.Uusecase.CreateUser(ctx, req)
 	if err != nil {
 		c.JSON(message.StatusBadRequestCode, models.CreateResponse(message.StatusBadRequestCode, message.FAILED, "Failed Create User", nil))
 		return

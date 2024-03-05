@@ -1,10 +1,12 @@
 package repository
 
 import (
+	"context"
 	"go-project/models"
 	"go-project/utils/log"
 	"strings"
 
+	"go.elastic.co/apm"
 	"gorm.io/gorm"
 )
 
@@ -18,7 +20,9 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return UserRepository{DB: db}
 }
 
-func (r *UserRepository) RegisterUser(newUser *models.User) error {
+func (r *UserRepository) RegisterUser(ctx context.Context, newUser *models.User) error {
+	span, _ := apm.StartSpan(ctx, "insertUser", "repository")
+	defer span.End()
 	result := r.DB.Create(&newUser)
 	if result.Error != nil && strings.Contains(result.Error.Error(), "Duplicate key Value uniq") {
 		log.Log.Error(log.Register, "Error Create Data")
